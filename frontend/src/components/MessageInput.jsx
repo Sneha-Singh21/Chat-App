@@ -2,13 +2,10 @@ import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
-import Picker from "@emoji-mart/react";
-import data from "@emoji-mart/data";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // 👈 Add this
   const fileInputRef = useRef(null);
   const { sendMessages } = useChatStore();
 
@@ -43,7 +40,6 @@ const MessageInput = () => {
 
       setText("");
       setImagePreview(null);
-      setShowEmojiPicker(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -72,17 +68,6 @@ const MessageInput = () => {
         </div>
       )}
 
-      {/* Emoji Picker */}
-      {showEmojiPicker && (
-        <div className="absolute bottom-16 left-4 z-50">
-          <Picker
-            data={data}
-            onEmojiSelect={(emoji) => setText((prev) => prev + emoji.native)}
-            theme="dark"
-          />
-        </div>
-      )}
-
       <form onSubmit={handleSendMessage} className="flex items-center gap-2">
         <div className="flex-1 flex gap-2 relative">
           <input
@@ -108,15 +93,6 @@ const MessageInput = () => {
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
-          </button>
-
-          {/* 😀 Emoji Button */}
-          <button
-            type="button"
-            className="hidden sm:flex btn btn-circle cursor-pointer text-zinc-400"
-            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          >
-            😊
           </button>
         </div>
 
